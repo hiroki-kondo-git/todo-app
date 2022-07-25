@@ -6,7 +6,10 @@ import (
 )
 
 type TodoUseCase interface {
-	CreateTodo(string, string) (string, error)
+	CreateTodo(string, int) (string, error)
+	UpdateTodo(string, int, int) (string, error)
+	DeleteTodo(int) (string, error)
+	GetAllTodo() ([]*model.Todo, error)
 }
 
 type todoUseCase struct {
@@ -19,12 +22,40 @@ func NewTodoUseCase(tr repository.TodoRepository) TodoUseCase {
 	}
 }
 
-func (tu todoUseCase) CreateTodo(text string, status string) (string, error) {
+func (tu todoUseCase) CreateTodo(text string, status int) (string, error) {
 	todo := model.NewTodo(text, status)
 	// validation
 	res, err := tu.todoRepository.Insert(todo)
 	if err != nil {
 		return "", err
+	}
+	return res, nil
+}
+
+func (tu todoUseCase) UpdateTodo(text string, status int, id int) (string, error) {
+	todo := model.NewTodo(text, status)
+	todo.Id = id
+	// validation
+	res, err := tu.todoRepository.Upsert(todo)
+	if err != nil {
+		return "", nil
+	}
+	return res, nil
+}
+
+func (tu todoUseCase) DeleteTodo(id int) (string, error) {
+	res, err := tu.todoRepository.Delete(id)
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}
+
+func (tu todoUseCase) GetAllTodo() ([]*model.Todo, error) {
+	res, err := tu.todoRepository.Getall()
+	if err != nil {
+		return nil, err
 	}
 	return res, nil
 }

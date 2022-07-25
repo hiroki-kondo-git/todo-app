@@ -37,8 +37,8 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 
 // status一旦int
 type dataStruct struct {
-	todo   string
-	status int
+	Todo   string
+	Status int
 }
 
 func (th templateHandler) Index(c echo.Context) error {
@@ -49,8 +49,8 @@ func (th templateHandler) Index(c echo.Context) error {
 	data := []dataStruct{}
 	for _, v := range res {
 		ds := dataStruct{
-			todo:   v.Text,
-			status: v.Status,
+			Todo:   v.Text,
+			Status: v.Status,
 		}
 		data = append(data, ds)
 	}

@@ -5,25 +5,26 @@
         <title>todo App</title>
     </head>
     <body>
-        <h1>追加</h1>
+        <h1>add todo</h1>
         <form method="post" action="/new">
-            <p>内容<input type="text" size="30" placeholder="入力してください"></p>
-            <p>状態
+            <p>content<input type="text" name="content" size="30" placeholder="please enter ..."></p>
+            <p>status
                 <select name="status">
-                    <option value="未実行"></option>
-                    <option value="実行中">実行中</option>
-                    <option value="完了">完了</option>
+                    <option value="1">todo</option>
+                    <option value="2">doing</option>
+                    <option value="3">done</option>
                 </select>
             </p>
-            <p><input type="submit" value="Send"></p>
+            <p><input type="submit" value="Add"></p>
         </form>
         <ul>
             {{ range . }}
-            <li>内容:{{- .Todo -}}、状態:{{- .Status -}}<br></li>
-                <label><a href="/detail/{{.Id}}"></a></label>
-                <label><a href="/detail_check/{{.Id}}">削除</a></label>
-        </ul>
+                <li>content:{{- .Content -}}、status:{{- .Status -}}<br>
+                    <label><a href="/detail/{{.Id}}"></a></label>
+                    <label><a href="/detail_check/{{.Id}}">delete</a></label>
+                </li>
             {{ end }}
+        </ul>
     </body>
     </html>
 {{end}}

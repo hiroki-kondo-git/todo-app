@@ -22,8 +22,8 @@ func NewTodoPersistence(db *sql.DB) repository.TodoRepository {
 
 func (tp todoPersistence) Insert(t *model.Todo) (string, error) {
 	res, err := tp.db.Exec(
-		"INSERT INTO todo (text, status) VALUES (?, ?)",
-		t.Text,
+		"INSERT INTO todo (content, status) VALUES (?, ?)",
+		t.Content,
 		t.Status,
 	)
 	if err != nil {
@@ -39,8 +39,8 @@ func (tp todoPersistence) Insert(t *model.Todo) (string, error) {
 
 func (tp todoPersistence) Upsert(t *model.Todo) (string, error) {
 	res, err := tp.db.Exec(
-		"UPDATE todo SET text = ?, status = ? WHERE id = ?",
-		t.Text,
+		"UPDATE todo SET content = ?, status = ? WHERE id = ?",
+		t.Content,
 		t.Status,
 		t.Id,
 	)
@@ -82,7 +82,7 @@ func (tp todoPersistence) Getall() ([]*model.Todo, error) {
 	todoList := []*model.Todo{}
 	for rows.Next() {
 		t := &model.Todo{}
-		if err := rows.Scan(&t.Id, &t.Text, &t.Status, &t.CreatedAt, &t.UpdatedAt); err != nil {
+		if err := rows.Scan(&t.Id, &t.Content, &t.Status, &t.CreatedAt, &t.UpdatedAt); err != nil {
 			return nil, fmt.Errorf("failed to scan record")
 		}
 		todoList = append(todoList, t)

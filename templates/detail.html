@@ -1,5 +1,5 @@
 {{define "detail"}}
-    <html lang="en">
+    <html>
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,8 @@
     </head>
     <body>
         <h2>詳細</h2>
-            <form method="post" action="/update/{{.Id}}"></form>
+        <p>{{.}}</p>
+            <!-- <form method="post" action="/update/{{.Id}}">
                 <p>内容<input type="text" name="text" size="30" value="{{.Text}}"></p>
                 <p>状態
                     <select name="status">
@@ -27,6 +28,7 @@
                     </select>
                 </p>
                 <p><input type="submit"></p>
+            </form> -->
     </body>
     </html>
 {{end}}

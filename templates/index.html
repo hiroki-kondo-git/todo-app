@@ -19,8 +19,9 @@
         </form>
         <ul>
             {{ range . }}
-                <li>content:{{- .Content -}}、status:{{- .Status -}}<br>
-                    <label><a href="/detail/{{.Id}}"></a></label>
+                <li>
+                    <label><p>content:<a href="/detail/{{.Id}}">{{- .Content -}}</a></label></p>
+                    <span>status:{{- .Status -}}</span>
                     <label><a href="/detail_check/{{.Id}}">delete</a></label>
                 </li>
             {{ end }}

@@ -5,15 +5,15 @@ import "time"
 // status 1=todo, 2=done
 type Todo struct {
 	Id        int    `json:"id"`
-	Text      string `json:"text`
+	Content   string `json:"text`
 	Status    int    `json:"status"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func NewTodo(text string, status int) *Todo {
+func NewTodo(content string, status int) *Todo {
 	todo := new(Todo)
-	todo.Text = text
+	todo.Content = content
 	todo.Status = status
 	return todo
 }

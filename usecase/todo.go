@@ -10,6 +10,7 @@ type TodoUseCase interface {
 	UpdateTodo(string, int, int) (string, error)
 	DeleteTodo(int) (string, error)
 	GetAllTodo() ([]*model.Todo, error)
+	GetTodoFromId(id int) (*model.Todo, error)
 }
 
 type todoUseCase struct {
@@ -58,4 +59,12 @@ func (tu todoUseCase) GetAllTodo() ([]*model.Todo, error) {
 		return nil, err
 	}
 	return rows, nil
+}
+
+func (tu todoUseCase) GetTodoFromId(id int) (*model.Todo, error) {
+	row, err := tu.todoRepository.GetTodoFromId(id)
+	if err != nil {
+		return nil, err
+	}
+	return row, nil
 }

@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"todo-app/domain/model"
@@ -96,6 +97,17 @@ func (tp todoPersistence) Getall() ([]*model.Todo, error) {
 	return todoList, nil
 }
 
-// func (tp todoPersistence) GetTodo(id int) (*model.Todo) {
-// 	rows, err := db.Query("")
-// }
+func (tp todoPersistence) GetTodoFromId(id int) (*model.Todo, error) {
+	t := &model.Todo{}
+	err := tp.db.QueryRow("SELECT * FROM todo WHERE id = ?", id).
+		Scan(&t.Id, &t.Content, &t.Status, &t.CreatedAt, &t.UpdatedAt)
+	if errors.Is(err, sql.ErrNoRows) {
+		fmt.Println("no records.")
+		return nil, err
+	}
+	if err != nil {
+		log.Fatal("get row failed :", err)
+		return nil, err
+	}
+	return t, nil
+}

@@ -7,4 +7,5 @@ type TodoRepository interface {
 	Upsert(*model.Todo) (string, error)
 	Delete(int) (string, error)
 	Getall() ([]*model.Todo, error)
+	GetTodoFromId(id int) (*model.Todo, error)
 }

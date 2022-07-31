@@ -18,7 +18,7 @@ func ConnectDB() (*sql.DB, error) {
 	cmd := fmt.Sprintf(`
 		CREATE TABLE IF NOT EXISTS %s (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			text STRING NOT NULL,
+			content STRING NOT NULL,
 			status STRING NOT NULL,
 			created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')),
 			updated_at TIMESTAMP DEFAULT (DATETIME('now','localtime'))

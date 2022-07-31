@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"todo-app/domain/model"
 	"todo-app/usecase"
 
 	"github.com/labstack/echo"
@@ -14,7 +13,8 @@ type TodoHandler interface {
 	CreateTodo(echo.Context) error
 	UpdateTodo(echo.Context) error
 	DeleteTodo(echo.Context) error
-	GetAllTodo() ([]*model.Todo, error)
+	GetAllTodo(echo.Context) error
+	GetTodoFromId(echo.Context) error
 }
 
 type todoHandler struct {
@@ -27,34 +27,39 @@ func NewTodoHandler(tu usecase.TodoUseCase) TodoHandler {
 	}
 }
 
+type TodoResponse struct {
+	Id      int    `json:"id"`
+	Content string `json:"text`
+	Status  string `json:"status"`
+}
+
 func (th todoHandler) CreateTodo(c echo.Context) error {
-	text := c.QueryParam("text")
+	content := c.QueryParam("content")
 	status, err := strconv.Atoi(c.QueryParam("status"))
 	if err != nil {
 		return err
 	}
 
-	res, err := th.todoUsecase.CreateTodo(text, status)
+	res, err := th.todoUsecase.CreateTodo(content, status)
 	if err != nil {
 		return err
 	}
+	fmt.Println(res)
 	return c.String(http.StatusOK, res)
 }
 
-func (tu todoHandler) UpdateTodo(c echo.Context) error {
-	text := c.QueryParam("text")
+func (th todoHandler) UpdateTodo(c echo.Context) error {
+	content := c.QueryParam("content")
 	status, err := strconv.Atoi(c.QueryParam("status"))
 	if err != nil {
 		return err
 	}
-
 	id, err := strconv.Atoi(c.Param("id"))
-
 	if err != nil {
 		return err
 	}
 
-	res, err := tu.todoUsecase.UpdateTodo(text, status, id)
+	res, err := th.todoUsecase.UpdateTodo(content, status, id)
 	if err != nil {
 		return err
 	}
@@ -62,12 +67,12 @@ func (tu todoHandler) UpdateTodo(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
-func (tu todoHandler) DeleteTodo(c echo.Context) error {
+func (th todoHandler) DeleteTodo(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		fmt.Sprintln("failed to get query id")
 	}
-	res, err := tu.todoUsecase.DeleteTodo(id)
+	res, err := th.todoUsecase.DeleteTodo(id)
 	if err != nil {
 		return err
 	}
@@ -75,11 +80,49 @@ func (tu todoHandler) DeleteTodo(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
-func (tu todoHandler) GetAllTodo() ([]*model.Todo, error) {
-	res, err := tu.todoUsecase.GetAllTodo()
+func (th todoHandler) GetAllTodo(c echo.Context) error {
+	rows, err := th.todoUsecase.GetAllTodo()
 	if err != nil {
-		return nil, err
+		return err
+	}
+	var res []*TodoResponse
+	for _, v := range rows {
+		r := &TodoResponse{}
+		r.Id = v.Id
+		r.Content = v.Content
+		switch v.Status {
+		case 0:
+			r.Status = "todo"
+		case 1:
+			r.Status = "doing"
+		case 2:
+			r.Status = "done"
+		}
+		res = append(res, r)
 	}
 
-	return res, err
+	return c.String(http.StatusOK, "a")
+}
+
+func (th todoHandler) GetTodoFromId(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return err
+	}
+	res := &TodoResponse{}
+	row, err := th.todoUsecase.GetTodoFromId(id)
+	if err != nil {
+		return err
+	}
+	res.Id = row.Id
+	res.Content = row.Content
+	switch row.Status {
+	case 0:
+		res.Status = "todo"
+	case 1:
+		res.Status = "doing"
+	case 2:
+		res.Status = "done"
+	}
+	return c.String(http.StatusOK, "i")
 }

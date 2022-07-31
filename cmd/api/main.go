@@ -2,7 +2,6 @@ package main
 
 import (
 	db "todo-app/config"
-	template_handler "todo-app/handler/template"
 	todo_handler "todo-app/handler/todo"
 	"todo-app/infra/persistence"
 	"todo-app/usecase"
@@ -21,12 +20,10 @@ func main() {
 	todoPersistence := persistence.NewTodoPersistence(db)
 	todoUseCase := usecase.NewTodoUseCase(todoPersistence)
 	todoHandler := todo_handler.NewTodoHandler(todoUseCase)
-	templateHandler := template_handler.NewTemplateHandler(todoHandler)
 
 	e := echo.New()
-	e.Renderer = template_handler.NewTemplate("templates/index.html")
 
-	e.GET("/", templateHandler.Index)
+	e.GET("/", todoHandler.GetAllTodo)
 	e.POST("/new", todoHandler.CreateTodo)
 	e.PUT("/update/:id", todoHandler.UpdateTodo)
 	e.DELETE("/delete/:id", todoHandler.DeleteTodo)

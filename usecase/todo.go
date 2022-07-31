@@ -10,6 +10,7 @@ type TodoUseCase interface {
 	UpdateTodo(string, int, int) (string, error)
 	DeleteTodo(int) (string, error)
 	GetAllTodo() ([]*model.Todo, error)
+	GetTodoFromId(id int) (*model.Todo, error)
 }
 
 type todoUseCase struct {
@@ -22,8 +23,8 @@ func NewTodoUseCase(tr repository.TodoRepository) TodoUseCase {
 	}
 }
 
-func (tu todoUseCase) CreateTodo(text string, status int) (string, error) {
-	todo := model.NewTodo(text, status)
+func (tu todoUseCase) CreateTodo(content string, status int) (string, error) {
+	todo := model.NewTodo(content, status)
 	// validation
 	res, err := tu.todoRepository.Insert(todo)
 	if err != nil {
@@ -32,8 +33,8 @@ func (tu todoUseCase) CreateTodo(text string, status int) (string, error) {
 	return res, nil
 }
 
-func (tu todoUseCase) UpdateTodo(text string, status int, id int) (string, error) {
-	todo := model.NewTodo(text, status)
+func (tu todoUseCase) UpdateTodo(content string, status int, id int) (string, error) {
+	todo := model.NewTodo(content, status)
 	todo.Id = id
 	// validation
 	res, err := tu.todoRepository.Upsert(todo)
@@ -53,9 +54,17 @@ func (tu todoUseCase) DeleteTodo(id int) (string, error) {
 }
 
 func (tu todoUseCase) GetAllTodo() ([]*model.Todo, error) {
-	res, err := tu.todoRepository.Getall()
+	rows, err := tu.todoRepository.Getall()
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	return rows, nil
+}
+
+func (tu todoUseCase) GetTodoFromId(id int) (*model.Todo, error) {
+	row, err := tu.todoRepository.GetTodoFromId(id)
+	if err != nil {
+		return nil, err
+	}
+	return row, nil
 }

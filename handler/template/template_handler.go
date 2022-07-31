@@ -35,24 +35,10 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-// status一旦int
-type dataStruct struct {
-	Todo   string
-	Status int
-}
-
 func (th templateHandler) Index(c echo.Context) error {
 	res, err := th.todoHandler.GetAllTodo()
 	if err != nil {
 		return err
 	}
-	data := []dataStruct{}
-	for _, v := range res {
-		ds := dataStruct{
-			Todo:   v.Text,
-			Status: v.Status,
-		}
-		data = append(data, ds)
-	}
-	return c.Render(http.StatusOK, "index", data)
+	return c.Render(http.StatusOK, "index", res)
 }

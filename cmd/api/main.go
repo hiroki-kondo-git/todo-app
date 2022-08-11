@@ -27,5 +27,5 @@ func main() {
 	e.POST("/new", todoHandler.CreateTodo)
 	e.PUT("/update/:id", todoHandler.UpdateTodo)
 	e.DELETE("/delete/:id", todoHandler.DeleteTodo)
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":8082"))
 }

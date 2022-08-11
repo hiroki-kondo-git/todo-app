@@ -35,25 +35,19 @@ type TodoResponse struct {
 
 func (th todoHandler) CreateTodo(c echo.Context) error {
 	content := c.QueryParam("content")
-	status, err := strconv.Atoi(c.QueryParam("status"))
-	if err != nil {
-		return err
-	}
+	status := convertStatusAtoI(c.QueryParam("status"))
 
 	res, err := th.todoUsecase.CreateTodo(content, status)
 	if err != nil {
 		return err
 	}
 	fmt.Println(res)
-	return c.String(http.StatusOK, res)
+	return c.JSON(http.StatusOK, res)
 }
 
 func (th todoHandler) UpdateTodo(c echo.Context) error {
 	content := c.QueryParam("content")
-	status, err := strconv.Atoi(c.QueryParam("status"))
-	if err != nil {
-		return err
-	}
+	status := convertStatusAtoI(c.QueryParam("status"))
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
@@ -64,7 +58,7 @@ func (th todoHandler) UpdateTodo(c echo.Context) error {
 		return err
 	}
 
-	return c.String(http.StatusOK, res)
+	return c.JSON(http.StatusOK, res)
 }
 
 func (th todoHandler) DeleteTodo(c echo.Context) error {
@@ -77,7 +71,7 @@ func (th todoHandler) DeleteTodo(c echo.Context) error {
 		return err
 	}
 
-	return c.String(http.StatusOK, res)
+	return c.JSON(http.StatusOK, res)
 }
 
 func (th todoHandler) GetAllTodo(c echo.Context) error {
@@ -90,18 +84,11 @@ func (th todoHandler) GetAllTodo(c echo.Context) error {
 		r := &TodoResponse{}
 		r.Id = v.Id
 		r.Content = v.Content
-		switch v.Status {
-		case 0:
-			r.Status = "todo"
-		case 1:
-			r.Status = "doing"
-		case 2:
-			r.Status = "done"
-		}
+		r.Status = convertStatusItoA(v.Status)
 		res = append(res, r)
 	}
 
-	return c.String(http.StatusOK, "a")
+	return c.JSON(http.StatusOK, res)
 }
 
 func (th todoHandler) GetTodoFromId(c echo.Context) error {
@@ -116,13 +103,33 @@ func (th todoHandler) GetTodoFromId(c echo.Context) error {
 	}
 	res.Id = row.Id
 	res.Content = row.Content
-	switch row.Status {
+	res.Status = convertStatusItoA(row.Status)
+
+	return c.JSON(http.StatusOK, res)
+}
+
+func convertStatusItoA(status int) string {
+	var res string
+	switch status {
 	case 0:
-		res.Status = "todo"
+		res = "todo"
 	case 1:
-		res.Status = "doing"
+		res = "doing"
 	case 2:
-		res.Status = "done"
+		res = "done"
 	}
-	return c.String(http.StatusOK, "i")
+	return res
+}
+
+func convertStatusAtoI(status string) int {
+	var res int
+	switch status {
+	case "todo":
+		res = 0
+	case "doing":
+		res = 1
+	case "done":
+		res = 2
+	}
+	return res
 }

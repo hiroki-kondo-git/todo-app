@@ -29,7 +29,7 @@ func NewTodoHandler(tu usecase.TodoUseCase) TodoHandler {
 
 type TodoResponse struct {
 	Id      int    `json:"id"`
-	Content string `json:"text`
+	Content string `json:"content`
 	Status  string `json:"status"`
 }
 

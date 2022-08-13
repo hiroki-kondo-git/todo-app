@@ -1,32 +1,19 @@
 <template>
 	<div class="home">
 		<img alt="Vue logo" src="../assets/logo.png">
-		<HelloWorld msg="Todo List"/>
-		<p>{{greetText}}</p>
-		<label v-for="[status, text] in Array.from(labels)" :key="status">
-			<input type="radio" v-model="currentStatus" :value="status">
-			{{text}}
-		</label>
-		{{ filteredTodoList }} 件
 		<table>
 			<thead>
 				<tr>
 					<th class="id">ID</th>
 					<th class="content">Content</th>
 					<th class="status">Status</th>
-					<th class="button">-</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="todo in filteredTodoList" :key="todo.id">
-					<th>{{ todo.id }}</th>
-					<td>{{ todo.Content }}</td>
-					<td>{{todo.status}}</td>
-					<td class="status">
-						<button @click="toggleStatus(todo)">
-							{{ labels.get(todo.status )}}
-						</button>
-					</td>
+				<tr v-for="todo in todoList" :key="todo.id">
+					<th><router-link :to="{name: 'todoEdit', params: {id: todo.id}}">{{ todo.id }}</router-link></th>
+					<td><router-link :to="{name: 'todoEdit', params: {id: todo.id}}">{{ todo.Content }}</router-link></td>
+					<td><router-link :to="{name: 'todoEdit', params: {id: todo.id}}">{{todo.status}}</router-link></td>
 				</tr>
 			</tbody>
 		</table>
@@ -37,51 +24,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import ApiService from '@/services/ApiService'
 import ResponseData from '@/types/ResponseData'
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
-import {Status, TodoItem} from '@/types/TodoItem'
+import {TodoItem} from '@/types/TodoItem'
 
 @Component({
-	components: {
-		HelloWorld,
-	},
 })
 export default class TodoList extends Vue {
-	public greetText: string = "Hello";
 	// todo一覧
 	public todoList: TodoItem[] = []
-
-	// status絞り込み
-	public labels = new Map<Status, string>([
-		[Status.all, '全件'],
-		[Status.todo, '未着手'],
-		[Status.doing, '対応中'],
-		[Status.done, '完了']
-	])
-	// 表示したいstatus
-	public currentStatus: Status = Status.all
-
-	// currentStatusを元に絞り込み
-	public get filteredTodoList() {
-		return this.todoList.filter(t =>
-		this.currentStatus === Status.all ? true : this.currentStatus === t.status)
-	}
-
-	// todoのstatus変更
-	public toggleStatus(todo: TodoItem) {
-		switch (todo.status) {
-			case Status.todo:
-				todo.status = Status.doing;
-				break;
-			case Status.doing:
-				todo.status = Status.done;
-				break;
-			case Status.done:
-				todo.status = Status.todo;
-				break;
-			default:
-				break;
-		}
-	}
 
 	public retrieveTodoList() {
 		ApiService.getAll()

@@ -33,15 +33,22 @@ type TodoResponse struct {
 	Status  string `json:"status"`
 }
 
-func (th todoHandler) CreateTodo(c echo.Context) error {
-	content := c.QueryParam("content")
-	status := convertStatusAtoI(c.QueryParam("status"))
+type TodoRequest struct {
+	Id      int    `json:"id"`
+	Content string `json:"content"`
+	Status  string `json:"status"`
+}
 
-	res, err := th.todoUsecase.CreateTodo(content, status)
+func (th todoHandler) CreateTodo(c echo.Context) error {
+	todo := &TodoRequest{}
+	if err := c.Bind(todo); err != nil {
+		return err
+	}
+
+	res, err := th.todoUsecase.CreateTodo(todo.Content, convertStatusAtoI(todo.Status))
 	if err != nil {
 		return err
 	}
-	fmt.Println(res)
 	return c.JSON(http.StatusOK, res)
 }
 

@@ -5,7 +5,7 @@ import "time"
 // status 1=todo, 2=done
 type Todo struct {
 	Id        int    `json:"id"`
-	Content   string `json:"text`
+	Content   string `json:"content`
 	Status    int    `json:"status"`
 	CreatedAt time.Time
 	UpdatedAt time.Time

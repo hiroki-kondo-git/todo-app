@@ -17,6 +17,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<router-link to="/new">Add Todo</router-link>
 	</div>
 </template>
 

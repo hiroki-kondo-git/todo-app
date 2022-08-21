@@ -1,22 +1,11 @@
 <template>
 	<div class="home">
 		<img alt="Vue logo" src="../assets/logo.png">
-		<table>
-			<thead>
-				<tr>
-					<th class="id">ID</th>
-					<th class="content">Content</th>
-					<th class="status">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="todo in todoList" :key="todo.id">
-					<th><router-link :to="{name: 'todoDetails', params: {id: todo.id}}">{{ todo.id }}</router-link></th>
-					<td><router-link :to="{name: 'todoDetails', params: {id: todo.id}}">{{ todo.Content }}</router-link></td>
-					<td><router-link :to="{name: 'todoDetails', params: {id: todo.id}}">{{todo.status}}</router-link></td>
-				</tr>
-			</tbody>
-		</table>
+		<b-table striped hover :items="todoList">
+			<template v-slot:cell(id)="data">
+				<router-link :to="{name: 'todoDetails', params: {id: data.value}}">{{ data.value }}</router-link>
+			</template>
+		</b-table>
 		<router-link to="/new">Add Todo</router-link>
 	</div>
 </template>
@@ -29,6 +18,7 @@ import {TodoItem} from '@/types/TodoItem'
 
 @Component({
 })
+
 export default class TodoList extends Vue {
 	// todo一覧
 	public todoList: TodoItem[] = []

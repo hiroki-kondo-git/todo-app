@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import TodoList from '../components/TodoList.vue'
-import TodoEdit from '../components/TodoEdit.vue'
+import TodoDetails from '../components/TodoDetails.vue'
 import TodoCreate from '../components/TodoCreate.vue'
 
 Vue.use(VueRouter)
@@ -27,8 +27,8 @@ const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/edit/:id`,
-		name: 'todoEdit',
-		component: TodoEdit,
+		name: 'todoDetails',
+		component: TodoDetails,
 	}
 ]
 

@@ -4,7 +4,9 @@ class APiService {
 	getAll(): Promise<any> {
 		return http.get("/api/");
 	}
-
+	get(id: any): Promise<any> {
+		return http.get(`/api/detail/${id}`);
+	}
 	create(data: any): Promise<any> {
 		return http.post("/api/new", data);
 	}

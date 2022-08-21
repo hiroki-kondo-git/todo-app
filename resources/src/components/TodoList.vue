@@ -11,9 +11,9 @@
 			</thead>
 			<tbody>
 				<tr v-for="todo in todoList" :key="todo.id">
-					<th><router-link :to="{name: 'todoEdit', params: {id: todo.id}}">{{ todo.id }}</router-link></th>
-					<td><router-link :to="{name: 'todoEdit', params: {id: todo.id}}">{{ todo.Content }}</router-link></td>
-					<td><router-link :to="{name: 'todoEdit', params: {id: todo.id}}">{{todo.status}}</router-link></td>
+					<th><router-link :to="{name: 'todoDetails', params: {id: todo.id}}">{{ todo.id }}</router-link></th>
+					<td><router-link :to="{name: 'todoDetails', params: {id: todo.id}}">{{ todo.Content }}</router-link></td>
+					<td><router-link :to="{name: 'todoDetails', params: {id: todo.id}}">{{todo.status}}</router-link></td>
 				</tr>
 			</tbody>
 		</table>

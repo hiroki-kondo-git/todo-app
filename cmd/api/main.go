@@ -24,6 +24,7 @@ func main() {
 	e := echo.New()
 
 	e.GET("/", todoHandler.GetAllTodo)
+	e.GET("/detail/:id", todoHandler.GetTodoFromId)
 	e.POST("/new", todoHandler.CreateTodo)
 	e.PUT("/update/:id", todoHandler.UpdateTodo)
 	e.DELETE("/delete/:id", todoHandler.DeleteTodo)

@@ -35,7 +35,6 @@ export default class TodoCreate extends Vue {
 			content: this.todoItem.Content,
 			status: this.todoItem.status,
 		};
-		console.log(data);
 		ApiService.create(data)
 		.then((response: ResponseData) => {
 			this.todoItem.id = response.data.id;

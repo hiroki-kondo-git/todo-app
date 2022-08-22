@@ -53,14 +53,17 @@ func (th todoHandler) CreateTodo(c echo.Context) error {
 }
 
 func (th todoHandler) UpdateTodo(c echo.Context) error {
-	content := c.QueryParam("content")
-	status := convertStatusAtoI(c.QueryParam("status"))
+	todo := &TodoRequest{}
+	if err := c.Bind(todo); err != nil {
+		return err
+	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
 	}
+	todo.Id = id
 
-	res, err := th.todoUsecase.UpdateTodo(content, status, id)
+	res, err := th.todoUsecase.UpdateTodo(todo.Content, convertStatusAtoI(todo.Status), todo.Id)
 	if err != nil {
 		return err
 	}

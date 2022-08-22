@@ -12,7 +12,7 @@ class APiService {
 	}
 
 	update(id: any, data: any): Promise<any> {
-		return http.put(`/api/update/${id}`);
+		return http.put(`/api/update/${id}`, data);
 	}
 
 	delete(id: any): Promise<any> {

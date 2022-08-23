@@ -23,8 +23,9 @@
 					size="sm"
 				></b-form-select>
 			</b-form-group>
-			<b-button type="submit" variant="primary">Submit</b-button>
+			<b-button type="submit" variant="primary">Update</b-button>
 		</b-form>
+		<button class="btn btn-primary delete-btn" @click="deleteTodo">delete</button>
 	</div>
 </template>
 
@@ -72,6 +73,17 @@ export default class TodoDetails extends Vue {
 			console.log(e);
 		})
 	}
+	public deleteTodo() {
+		ApiService.delete(this.todoItem.id)
+		.then((response: ResponseData) => {
+			console.log(response.data);
+			this.$router.push({ name: "todoList"})
+		})
+		.catch((e: Error) => {
+			console.log(e);
+			
+		})
+	}
 	public created() {
 		this.getTodo(this.$route.params.id);
 	}
@@ -79,7 +91,22 @@ export default class TodoDetails extends Vue {
 </script>
 
 <style>
-	.card.mb-2 {
+	form {
+		width: 70%;
 		margin: 0 auto;
+		border: .2rem solid;
+		border-color: whitesmoke;
+		border-radius: 10%;
+		padding: 2rem;
+		margin-bottom: 2rem;
+	}
+	.delete-btn {
+		background-color: #dc3545;
+		border-color: #dc3545;
+	}
+	.delete-btn:hover {
+		background-color: #dc3545;
+		border-color: #dc3545;
+		opacity: 0.6;
 	}
 </style>

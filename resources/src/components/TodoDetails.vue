@@ -76,7 +76,6 @@ export default class TodoDetails extends Vue {
 	public deleteTodo() {
 		ApiService.delete(this.todoItem.id)
 		.then((response: ResponseData) => {
-			console.log(response.data);
 			this.$router.push({ name: "todoList"})
 		})
 		.catch((e: Error) => {
